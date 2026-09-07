@@ -40,12 +40,11 @@ st.textContent =
   '  border:1px solid #0002;margin-right:6px;vertical-align:-2px}' +
   '#bp .bp-fig .lcap{text-align:center;font-weight:800;color:#334155;' +
   '  font-size:clamp(11px,1vw,18px);margin-top:2px}' +
-  /* 떠 있는 위젯 가리기 (규격 8).
-     board-pro.js 는 뒤로(#bb-btn) · 기록초기화(.tr-btn) · 수업모드(.cm-launch) ·
-     계급배지(#rk-badge) 넷만 가린다. 이 도구에는 평가기준(#rb-btn)이 더 붙어 있고,
-     z-index 가 21억이라 칠판 위로 올라와 요점 글자를 덮는다. 여기서 같이 가린다.
-     board-pro.js 는 공용 파일이라 손대지 않는다. */
-  'body.bp-open #rb-btn,body.bp-open #fxSnd{visibility:hidden!important;pointer-events:none!important}';
+  /* 떠 있는 위젯 가리기.
+     평가 기준(#rb-btn)은 2026-09-07 부터 공용 board-pro.js 가 가리므로 여기서 뺐다.
+     소리(#fxSnd)는 공용이 일부러 안 가린다(수업 중에 끌 일이 있어서). 이 도구는
+     그 전부터 가려 왔으므로 그대로 둔다 — 없애면 안 보이던 단추가 갑자기 나타난다. */
+  'body.bp-open #fxSnd{visibility:hidden!important;pointer-events:none!important}';
 document.head.appendChild(st);
 
 /* ── 새로 그린 것 — 슬라이드에만 필요한 그림 6개 ──
