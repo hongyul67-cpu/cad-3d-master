@@ -6,10 +6,10 @@
      · 「CAD 과정」 2D CAD(AutoCAD) 교재 111쪽 — Ⅰ~Ⅴ단원 · Ⅷ 수행평가 배점
      · 「도면 시트형식 만들기」(2019 3학년 전자기계회로) — Ⅵ단원 10단계 조작 순서
      · 「2학년 솔리드웍스 1~8」 실습과제 — Ⅶ단원 차시별 피처 주제
-   ▸ 그림은 도구가 이미 가진 것을 그대로 쓴다 (E조 규격 5)
-     FIG.coord / FIG.osnap / FIG.sheet / FIG.lines / FEAT 10종 / layTable()
-     — 전부 index.html 위쪽에 이미 있는 것이다. 여기서 다시 그리지 않는다.
-     슬라이드에만 필요한 그림 6개만 아래 「새로 그린 것」에 있다.
+   ▸ 그림은 배우기 카드와 **같은 그림**을 쓴다 — figs.js(공용 links/fig.js 로 그림) · FEAT 10종 · layTable().
+     전부 index.html 이 먼저 불러 둔 것이다. 여기서 다시 그리지 않는다.
+     (2026-09-30 그림06: 슬라이드에만 있던 그림 6개를 figs.js 로 옮겨 배우기와 함께 쓰고,
+      그림이 없던 슬라이드 20장에 같은 주제 그림을 붙였다.)
    ▸ 배우기 카드(LEARN 47장)는 그대로 둔다. 이것은 별도의 덱이다.
    ══════════════════════════════════════════════════════════════ */
 (function(){
@@ -47,126 +47,6 @@ st.textContent =
   'body.bp-open #fxSnd{visibility:hidden!important;pointer-events:none!important}';
 document.head.appendChild(st);
 
-/* ── 새로 그린 것 — 슬라이드에만 필요한 그림 6개 ──
-   도구의 배우기 카드에는 그림 없이 글로만 설명된 대목들이다. */
-function S(w,h,body){
-  return '<div class="fig"><svg viewBox="0 0 '+w+' '+h+'" style="width:100%;height:auto">'+body+'</svg></div>';
-}
-var NEW = {};
-
-/* CAD 작업의 순서 4단계 */
-NEW.flow = S(920,110,
-  [['도면시트형식','만들기'],['선 두께와','색 설정'],['투상도와','치수 완성'],['선 두께와','색 설정']]
-  .map(function(t,i){
-    var x = 12 + i*232, cx = x+93;
-    return '<rect x="'+x+'" y="22" width="186" height="66" rx="12" fill="'+(i%2?'#fff7ed':'#eff6ff')+
-      '" stroke="'+(i%2?'#f5a524':'#2563eb')+'" stroke-width="2.4"/>' +
-      '<text x="'+cx+'" y="50" font-size="20" font-weight="800" fill="#1c2430" text-anchor="middle">'+t[0]+
-      '<tspan x="'+cx+'" dy="24">'+t[1]+'</tspan></text>' +
-      (i<3 ? '<path d="M'+(x+196)+',55 L'+(x+224)+',55" stroke="#94a3b8" stroke-width="3"/>' +
-             '<path d="M'+(x+218)+',49 L'+(x+228)+',55 L'+(x+218)+',61 Z" fill="#94a3b8"/>' : '');
-  }).join('')
-);
-
-/* 객체 선택 — 윈도우와 크로싱 */
-NEW.pick = S(470,180,
-  '<g>' +
-  '<rect x="42" y="46" width="46" height="46" fill="none" stroke="#334155" stroke-width="2.2"/>' +
-  '<line x1="26" y1="126" x2="196" y2="126" stroke="#334155" stroke-width="2.2"/>' +
-  '<rect x="24" y="34" width="82" height="106" fill="rgba(37,99,235,.08)" stroke="#2563eb" stroke-width="2"/>' +
-  '<rect x="42" y="46" width="46" height="46" fill="none" stroke="#e5484d" stroke-width="3.4"/>' +
-  '<text x="112" y="20" font-size="15" font-weight="800" fill="#2563eb">윈도우 · 실선</text>' +
-  '<text x="20" y="162" font-size="14" fill="#334155">안에 <tspan font-weight="800">완전히 든 것만</tspan></text>' +
-  '</g>' +
-  '<g transform="translate(240,0)">' +
-  '<rect x="42" y="46" width="46" height="46" fill="none" stroke="#e5484d" stroke-width="3.4"/>' +
-  '<line x1="26" y1="126" x2="196" y2="126" stroke="#e5484d" stroke-width="3.4"/>' +
-  '<rect x="24" y="34" width="82" height="106" fill="rgba(18,161,80,.08)" stroke="#12a150" stroke-width="2" stroke-dasharray="7 5"/>' +
-  '<text x="112" y="20" font-size="15" font-weight="800" fill="#12a150">크로싱 · 점선</text>' +
-  '<text x="20" y="162" font-size="14" fill="#334155"><tspan font-weight="800">걸치기만 해도</tspan> 선택</text>' +
-  '</g>'
-);
-
-/* TRIM 과 EXTEND */
-NEW.trim = S(470,180,
-  '<g>' +
-  '<line x1="118" y1="30" x2="118" y2="128" stroke="#2563eb" stroke-width="3"/>' +
-  '<text x="88" y="24" font-size="14" font-weight="800" fill="#2563eb">경계</text>' +
-  '<line x1="30" y1="80" x2="118" y2="80" stroke="#334155" stroke-width="2.6"/>' +
-  '<line x1="118" y1="80" x2="196" y2="80" stroke="#e5484d" stroke-width="2.6" stroke-dasharray="6 5"/>' +
-  '<path d="M150,62 L172,98 M150,98 L172,62" stroke="#e5484d" stroke-width="2.6"/>' +
-  '<text x="14" y="162" font-size="15" font-weight="800" fill="#334155">TRIM · 넘친 쪽을 자른다</text>' +
-  '</g>' +
-  '<g transform="translate(240,0)">' +
-  '<line x1="186" y1="30" x2="186" y2="128" stroke="#2563eb" stroke-width="3"/>' +
-  '<text x="156" y="24" font-size="14" font-weight="800" fill="#2563eb">경계</text>' +
-  '<line x1="24" y1="80" x2="102" y2="80" stroke="#334155" stroke-width="2.6"/>' +
-  '<line x1="102" y1="80" x2="186" y2="80" stroke="#12a150" stroke-width="2.6" stroke-dasharray="6 5"/>' +
-  '<path d="M174,73 L186,80 L174,87 Z" fill="#12a150"/>' +
-  '<text x="14" y="162" font-size="15" font-weight="800" fill="#334155">EXTEND · 모자란 쪽을 늘린다</text>' +
-  '</g>'
-);
-
-/* ARRAY — 사각형 배열과 원형 배열 */
-NEW.array = S(470,180,
-  '<g>' +
-  [0,1,2].map(function(c){ return [0,1].map(function(r){
-      var first = (c===0&&r===0);
-      return '<rect x="'+(26+c*54)+'" y="'+(44+r*50)+'" width="34" height="34" rx="4" fill="'+
-        (first?'#dbeafe':'#f1f5f9')+'" stroke="'+(first?'#2563eb':'#94a3b8')+'" stroke-width="'+(first?2.8:1.8)+'"/>';
-    }).join(''); }).join('') +
-  '<text x="14" y="26" font-size="15" font-weight="800" fill="#2563eb">사각형 배열 (R)</text>' +
-  '<text x="14" y="164" font-size="14" fill="#334155">행 · 열 · 간격을 넣는다</text>' +
-  '</g>' +
-  '<g transform="translate(240,0)">' +
-  '<circle cx="112" cy="94" r="52" fill="none" stroke="#94a3b8" stroke-width="1.6" stroke-dasharray="6 5"/>' +
-  '<circle cx="112" cy="94" r="24" fill="none" stroke="#334155" stroke-width="2"/>' +
-  [0,60,120,180,240,300].map(function(a,i){
-    var r=a*Math.PI/180, x=112+52*Math.cos(r), y=94+52*Math.sin(r);
-    return '<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="9" fill="'+(i?'#f1f5f9':'#dbeafe')+
-      '" stroke="'+(i?'#94a3b8':'#2563eb')+'" stroke-width="'+(i?1.8:2.8)+'"/>';
-  }).join('') +
-  '<text x="14" y="26" font-size="15" font-weight="800" fill="#2563eb">원형 배열 (P)</text>' +
-  '<text x="14" y="164" font-size="14" fill="#334155">중심 · 개수 · 각도를 넣는다</text>' +
-  '</g>'
-);
-
-/* 선형 치수와 정렬 치수 */
-NEW.dims = S(470,180,
-  '<g>' +
-  '<path d="M34,124 L150,124 L150,44 Z" fill="#f8fafc" stroke="#334155" stroke-width="2.4"/>' +
-  '<line x1="34" y1="146" x2="150" y2="146" stroke="#e5484d" stroke-width="1.8"/>' +
-  '<line x1="34" y1="128" x2="34" y2="152" stroke="#e5484d" stroke-width="1.2"/>' +
-  '<line x1="150" y1="128" x2="150" y2="152" stroke="#e5484d" stroke-width="1.2"/>' +
-  '<text x="56" y="168" font-size="14.5" font-weight="800" fill="#e5484d">수평 거리가 적힌다</text>' +
-  '<text x="14" y="24" font-size="15" font-weight="800" fill="#334155">DIMLINEAR</text>' +
-  '</g>' +
-  '<g transform="translate(240,0)">' +
-  '<path d="M34,124 L150,124 L150,44 Z" fill="#f8fafc" stroke="#334155" stroke-width="2.4"/>' +
-  '<line x1="46" y1="136" x2="162" y2="56" stroke="#12a150" stroke-width="1.8"/>' +
-  '<line x1="34" y1="124" x2="46" y2="136" stroke="#12a150" stroke-width="1.2"/>' +
-  '<line x1="150" y1="44" x2="162" y2="56" stroke="#12a150" stroke-width="1.2"/>' +
-  '<text x="40" y="168" font-size="14.5" font-weight="800" fill="#12a150">실제 길이가 적힌다</text>' +
-  '<text x="14" y="24" font-size="15" font-weight="800" fill="#334155">DIMALIGNED</text>' +
-  '</g>'
-);
-
-/* 3D 모델링의 순서 */
-NEW.flow3d = S(780,140,
-  ['평면 고르기','스케치 그리기','피처로 형상','다음 피처']
-  .map(function(t,i){
-    var x = 14 + i*192;
-    return '<rect x="'+x+'" y="30" width="150" height="62" rx="12" fill="'+(i===3?'#f8fafc':'#eff6ff')+
-      '" stroke="'+(i===3?'#94a3b8':'#2563eb')+'" stroke-width="2.4"'+(i===3?' stroke-dasharray="7 5"':'')+'/>' +
-      '<text x="'+(x+75)+'" y="68" font-size="19" font-weight="800" fill="#1c2430" text-anchor="middle">'+t+'</text>' +
-      (i<3 ? '<path d="M'+(x+158)+',61 L'+(x+184)+',61" stroke="#94a3b8" stroke-width="3"/>' +
-             '<path d="M'+(x+178)+',55 L'+(x+188)+',61 L'+(x+178)+',67 Z" fill="#94a3b8"/>' : '');
-  }).join('') +
-  '<path d="M665,96 L665,122 L95,122 L95,98" fill="none" stroke="#94a3b8" stroke-width="2" stroke-dasharray="6 4"/>' +
-  '<path d="M89,106 L95,94 L101,106 Z" fill="#94a3b8"/>' +
-  '<text x="380" y="138" font-size="14" fill="#64748b" text-anchor="middle">피처 하나마다 이 네 칸을 한 바퀴 돈다</text>'
-);
-
 /* ── 그림 부르기 ── 도구가 이미 가진 것을 그대로 쓴다 */
 /* 피처 그림 여러 장을 나란히. flex-wrap 으로 두면 3장짜리가 두 줄로 접혀
    슬라이드에 스크롤이 생긴다 — 그리드로 한 줄에 못박는다. */
@@ -179,18 +59,27 @@ function feats(){
              '<div class="lcap">' + k + '</div></div>';
     }).join('') + '</div>';
 }
-var FIGS = {
-  coord  : function(){ return FIG.coord;  },
-  osnap  : function(){ return FIG.osnap;  },
-  sheet  : function(){ return FIG.sheet;  },
-  lines  : function(){ return FIG.lines;  },
+/* figs.js 그림 한 장 · 두 장 나란히.
+   슬라이드에는 파란 빈칸이 있다 — 빈칸의 답과 같은 글자(figs.js 에서 ans:true)는 {labels:false} 로 ? 가 된다.
+   배우기 카드에서는 같은 그림이 이름표를 다 보여 준다. */
+var NOLAB = { labels:false };
+function one(k){ return function(){ return '<div class="fig">' + FIG.svgOf(k, NOLAB) + '</div>'; }; }
+function two(a, b){
+  return function(){
+    return '<div class="fig" style="display:grid;gap:12px;align-items:center;grid-template-columns:repeat(2,minmax(0,1fr))">' +
+      '<div style="min-width:0">' + FIG.svgOf(a, NOLAB) + '</div><div style="min-width:0">' + FIG.svgOf(b, NOLAB) + '</div></div>';
+  };
+}
+var LF = {
+  coord  : one('coord'),   osnap  : one('osnap'),   sheet  : one('sheet'),   lines  : one('lines'),
   laytab : function(){ return '<div class="fig">' + layTable() + '</div>'; },
-  flow   : function(){ return NEW.flow;   },
-  pick   : function(){ return NEW.pick;   },
-  trim   : function(){ return NEW.trim;   },
-  array  : function(){ return NEW.array;  },
-  dims   : function(){ return NEW.dims;   },
-  flow3d : function(){ return NEW.flow3d; },
+  flow   : one('flow'),    pick   : one('pick'),    trim   : one('trim'),    array  : one('array'),
+  dims   : one('dims'),    flow3d : one('flow3d'),
+  limits : one('limits'),  screen : two('grid','zoompan'), polar5 : one('polar5'), xline : one('xline'),
+  polygon: one('polygon'), circle : one('circle'),  oops   : one('oops'),    mirror : one('mirror'),
+  offset : one('offset'),  edge   : two('chamfer','stretch'), hatch : one('hatch'), block : one('block'),
+  dimround: one('dimround'), dimchain: one('dimchain'), leader: one('leader'), title : one('title'),
+  assign : one('assign'),  note   : one('note'),    rgear  : two('render','gear'),
   f_ext  : function(){ return feats('돌출 보스/베이스','돌출 컷'); },
   f_fil  : function(){ return feats('필렛','오프셋'); },
   f_pat  : function(){ return feats('직선홈','선형 패턴','원형 패턴'); },
@@ -226,7 +115,7 @@ var LESSON = [
  anso:['설계 기간 단축','표준화 작업이 쉬워짐','재료비가 저절로 0 이 됨','원가 절감'], ansa:2,
  anse:'교재가 든 것은 기간 단축·품질 향상·표준화·원가 절감·신뢰성 향상 다섯이다.'},
 
-{u:'Ⅰ. CAD 시작하기', t:'도면 크기를 정한다 — LIMITS',
+{u:'Ⅰ. CAD 시작하기', t:'도면 크기를 정한다 — LIMITS', fig:'limits',
  pts:['<b>LIMITS</b> — CAD 안에서 <b>도면의 크기</b>를 정하는 명령. 왼쪽 아래와 오른쪽 위 구석을 넣는다.',
       '<b>여기서 다들 걸린다</b> — LIMITS 만 하고 끝내면 화면이 그대로다.',
       '반드시 이어서 <b>ZOOM ➜ {{All}}</b> 을 해야 정한 크기가 화면에 살아난다.',
@@ -236,7 +125,7 @@ var LESSON = [
  anso:['SAVE','ZOOM ➜ All','PLOT','LAYER'], ansa:1,
  anse:'<b>ZOOM ➜ All</b> 을 해야 새 도면 범위가 화면에 나타난다.'},
 
-{u:'Ⅰ. CAD 시작하기', t:'화면 다루기 — GRID · SNAP · ORTHO · ZOOM · PAN',
+{u:'Ⅰ. CAD 시작하기', t:'화면 다루기 — GRID · SNAP · ORTHO · ZOOM · PAN', fig:'screen',
  pts:['<b>GRID</b> — 일정 간격으로 점을 찍어 <b>모눈종이</b>처럼 보이게 한다.',
       '<b>SNAP</b> — 커서가 정해진 간격으로만 움직이게 묶는다.',
       '<b>ORTHO</b>(<b>{{F8}}</b>) — 선이 <b>수평·수직으로만</b> 그려지게 한다.',
@@ -281,7 +170,7 @@ var LESSON = [
  anso:['원점 기준','도면 왼쪽 아래 기준','화면 중심 기준','바로 앞 점 기준'], ansa:3,
  anse:'<code>@</code> 는 <b>바로 앞에 찍은 점</b>에서부터 재라는 표시다.'},
 
-{u:'Ⅱ. 좌표와 그리기', t:'같은 사각형을 세 방법으로 그려 보기',
+{u:'Ⅱ. 좌표와 그리기', t:'같은 사각형을 세 방법으로 그려 보기', fig:'polar5',
  pts:['(20,20) 에서 가로 50 · 세로 30 인 사각형을 그린다고 하자.',
       '<b>절대</b> — 20,20 ➜ 70,20 ➜ 70,50 ➜ 20,50 ➜ <code>C</code>',
       '<b>상대</b> — 20,20 ➜ <code>@50,0</code> ➜ <code>{{@0,30}}</code> ➜ <code>@-50,0</code> ➜ <code>C</code>',
@@ -292,7 +181,7 @@ var LESSON = [
  anso:['선이 지워진다','시작점까지 이어져 닫힌다','원이 된다','명령이 취소된다'], ansa:1,
  anse:'Close — 마지막 점에서 <b>시작점까지 자동으로 이어</b> 도형을 닫는다.'},
 
-{u:'Ⅱ. 좌표와 그리기', t:'선 그리기 — LINE · XLINE · PLINE',
+{u:'Ⅱ. 좌표와 그리기', t:'선 그리기 — LINE · XLINE · PLINE', fig:'xline',
  pts:['<b>LINE</b>(L) — 낱개의 선. 이어 그려도 <b>{{하나하나 따로}}</b> 인 요소다.',
       '<b>XLINE</b>(XL) — 화면 끝까지 이어지는 <b>무한선</b>. 중심선을 잡을 때 많이 쓴다.',
       '<b>PLINE</b>(PL) — 선과 호가 <b>{{이어진 하나}}</b> 의 요소가 된다. <b>두께</b>를 줄 수 있다.',
@@ -302,7 +191,7 @@ var LESSON = [
  anso:['LINE','XLINE','PLINE','RAY'], ansa:2,
  anse:'PLINE(폴리선). 하나로 묶여 있어 낱개로 쓰려면 <code>EXPLODE</code> 로 분해해야 한다.'},
 
-{u:'Ⅱ. 좌표와 그리기', t:'정해진 모양 — POLYGON · RECTANG',
+{u:'Ⅱ. 좌표와 그리기', t:'정해진 모양 — POLYGON · RECTANG', fig:'polygon',
  pts:['<b>POLYGON</b>(POL) — 정다각형. 삼각형부터 <b>{{1024}}</b> 각형까지 그릴 수 있다.',
       '내접(I) 은 원 <b>안에</b>, 외접(C) 은 원 <b>밖에</b> 접하게 그린다 — 육각너트는 이것으로 그린다.',
       '<b>RECTANG</b>(REC) — 대각선상 <b>두 점</b>으로 직사각형. 그리면서 <b>{{모따기·모깎기}}</b> 와 두께를 함께 줄 수 있다.',
@@ -312,7 +201,7 @@ var LESSON = [
  anso:['64','128','512','1024'], ansa:3,
  anse:'교재는 3각형부터 <b>1024</b>각형까지라고 적고 있다.'},
 
-{u:'Ⅱ. 좌표와 그리기', t:'둥근 것 — CIRCLE · ARC · ELLIPSE · DONUT',
+{u:'Ⅱ. 좌표와 그리기', t:'둥근 것 — CIRCLE · ARC · ELLIPSE · DONUT', fig:'circle',
  pts:['<b>CIRCLE</b>(C) 옵션 — 중심·반지름 / 중심·지름 / 2점(2P) / 3점(3P) / <b>{{접선·접선·반지름(TTR)}}</b>.',
       '<b>ARC</b>(A) — 호. 기본은 <b>3점</b>이고 시작·중심·끝 같은 조합이 여럿 있다.',
       '<b>ELLIPSE</b>(EL) — 타원. 축과 지름으로 그린다.',
@@ -324,7 +213,7 @@ var LESSON = [
  anse:'TTR = <b>T</b>an, <b>T</b>an, <b>R</b>adius — 접선 둘과 반지름으로 원을 그린다.'},
 
 /* ═══ Ⅲ. 도면 편집하기 ═══ */
-{u:'Ⅲ. 도면 편집하기', t:'지우기와 되살리기',
+{u:'Ⅲ. 도면 편집하기', t:'지우기와 되살리기', fig:'oops',
  pts:['<b>ERASE</b>(E) — 고른 요소를 지운다.',
       '<b>OOPS</b> — <b>{{가장 최근에 지운}}</b> 것을 되살린다. 단 <b>한 번만</b> 쓸 수 있다.',
       '<b>U</b> / <b>UNDO</b> — 바로 앞 명령을 되돌린다. <b>여러 번</b> 거슬러 갈 수 있다.',
@@ -334,7 +223,7 @@ var LESSON = [
  anso:['OOPS','UNDO','REDO','ERASE'], ansa:0,
  anse:'OOPS 다. 여러 단계를 거슬러 가려면 <code>U</code>(UNDO) 를 쓴다.'},
 
-{u:'Ⅲ. 도면 편집하기', t:'옮기고 복사하기 — COPY · MOVE · MIRROR',
+{u:'Ⅲ. 도면 편집하기', t:'옮기고 복사하기 — COPY · MOVE · MIRROR', fig:'mirror',
  pts:['<b>COPY</b>(CO) — 원본을 <b>{{남겨 두고}}</b> 복사. <b>MOVE</b>(M) — 원본을 옮긴다.',
       '둘 다 <b>기준점</b>을 먼저 찍는다. 기준점을 아무 데나 찍으면 자리가 어긋난다.',
       '<b>MIRROR</b>(MI) — 두 점을 축으로 <b>대칭 복사</b>. 대칭인 부품은 절반만 그리면 된다.',
@@ -344,7 +233,7 @@ var LESSON = [
  anso:['MIRRTEXT 를 0 으로','ORTHO 를 켠다','OSNAP 을 끈다','SNAP 값을 바꾼다'], ansa:0,
  anse:'MIRRTEXT 가 1 이면 글자까지 뒤집히고, <b>0</b> 이면 글자는 바로 선다.'},
 
-{u:'Ⅲ. 도면 편집하기', t:'OFFSET — 도면의 대부분을 만드는 명령',
+{u:'Ⅲ. 도면 편집하기', t:'OFFSET — 도면의 대부분을 만드는 명령', fig:'offset',
  pts:['<b>OFFSET</b>(O) — 일정한 간격만큼 떨어진 <b>평행한 요소</b>를 만든다.',
       '교재는 이 명령이 <b>도면 요소 생성의 {{대부분}}</b> 을 차지한다고 적고 있다.',
       '<b>원을 오프셋하면</b> 평행선이 아니라 <b>{{동심원}}</b> 이 된다.',
@@ -376,7 +265,7 @@ var LESSON = [
  anso:['자를 대상','배율','기준점','경계'], ansa:3,
  anse:'경계(edge) 를 먼저 고르고 Enter, 그다음 대상을 고른다.'},
 
-{u:'Ⅲ. 도면 편집하기', t:'모서리 다듬기와 크기 바꾸기',
+{u:'Ⅲ. 도면 편집하기', t:'모서리 다듬기와 크기 바꾸기', fig:'edge',
  pts:['<b>CHAMFER</b>(CHA) — 모서리를 <b>비스듬히</b> 깎는다(모따기). 도면의 <b>{{C1}}</b> 이 이것이다.',
       '<b>FILLET</b>(F) — 모서리를 <b>둥글게</b> 깎는다(모깎기). 도면의 <b>R</b> 이 이것이다.',
       '<b>SCALE</b>(SC) — 가로세로를 <b>같은 배율</b>로 키우거나 줄인다.',
@@ -388,7 +277,7 @@ var LESSON = [
  anse:'SCALE 은 가로세로가 같이 바뀐다. 한 방향만 바꾸려면 <b>STRETCH</b> 다.'},
 
 /* ═══ Ⅳ. 해칭 · 문자 · 도면층 ═══ */
-{u:'Ⅳ. 해칭 · 문자 · 도면층', t:'해칭 — BHATCH',
+{u:'Ⅳ. 해칭 · 문자 · 도면층', t:'해칭 — BHATCH', fig:'hatch',
  pts:['해칭은 <b>단면으로 잘린 면</b>을 무늬로 채워 나타내는 것이다.',
       '<b>BHATCH</b>(BH) — 무늬·각도·축척을 정하고 영역 안쪽을 눌러 채운다.',
       '<b>가장 흔한 사고</b> — 영역이 안 채워진다. 그러면 <b>{{닫혀 있는지}}</b> 부터 본다.',
@@ -420,7 +309,7 @@ var LESSON = [
  anso:['그대로 출력된다','오류가 난다','흐리게 출력된다','플롯 설정과 관계없이 출력되지 않는다'], ansa:3,
  anse:'교재 그대로 — 꺼지거나 동결된 층은 <b>플롯 설정값에 관계없이 출력되지 않는다.</b>'},
 
-{u:'Ⅳ. 해칭 · 문자 · 도면층', t:'블록 — BLOCK 과 INSERT',
+{u:'Ⅳ. 해칭 · 문자 · 도면층', t:'블록 — BLOCK 과 INSERT', fig:'block',
  pts:['<b>BLOCK</b> — 자주 쓰는 기호·부품을 <b>하나의 요소로 묶어</b> 둔다.',
       '<b>INSERT</b> — 묶어 둔 것을 도면에 <b>불러 넣는다.</b> 넣을 때 배율과 각도를 줄 수 있다.',
       '표면거칠기 기호·용접기호·볼트처럼 <b>{{되풀이되는 것}}</b> 에 쓴다.',
@@ -442,7 +331,7 @@ var LESSON = [
  anso:['DIMLINEAR','DIMALIGNED','DIMBASELINE','DIMCONTINUE'], ansa:1,
  anse:'DIMALIGNED — 면과 <b>나란한</b> 방향으로 실제 길이를 잰다.'},
 
-{u:'Ⅴ. 치수 기입과 출력', t:'둥근 것의 치수 — R · ∅ · 각도',
+{u:'Ⅴ. 치수 기입과 출력', t:'둥근 것의 치수 — R · ∅ · 각도', fig:'dimround',
  pts:['<b>DIMRADIUS</b> — 반지름. 앞에 <b>R</b> 이 붙는다.',
       '<b>DIMDIAMETER</b> — 지름. 앞에 <b>&#8960;</b> 가 붙는다.',
       '<b>DIMANGULAR</b> — 각도. <b>DIMCENTER</b> — 원·호의 <b>중심 표시</b>.',
@@ -452,7 +341,7 @@ var LESSON = [
  anso:['DIMRADIUS','DIMANGULAR','DIMDIAMETER','DIMCENTER'], ansa:2,
  anse:'DIMDIAMETER 다. DIMRADIUS 는 <b>R</b> 이 붙는다.'},
 
-{u:'Ⅴ. 치수 기입과 출력', t:'여러 개를 이어서 — QDIM · 기준선 · 연속',
+{u:'Ⅴ. 치수 기입과 출력', t:'여러 개를 이어서 — QDIM · 기준선 · 연속', fig:'dimchain',
  pts:['<b>QDIM</b> — 여러 치수를 <b>한 번에 빠르게</b> 넣는다.',
       '<b>DIMBASELINE</b> — <b>{{한 기준선에서}}</b> 각각 재어 나간다. 치수가 층층이 쌓인다.',
       '<b>DIMCONTINUE</b> — <b>{{앞 치수의 끝에서 이어}}</b> 나간다. 치수가 한 줄로 늘어선다.',
@@ -462,7 +351,7 @@ var LESSON = [
  anso:['DIMCONTINUE','DIMLINEAR','QDIM','DIMBASELINE'], ansa:3,
  anse:'DIMBASELINE(기준선 치수) 이다. 이어 붙이는 것은 DIMCONTINUE 다.'},
 
-{u:'Ⅴ. 치수 기입과 출력', t:'지시선 · 공차 · 치수 모양 · 출력',
+{u:'Ⅴ. 치수 기입과 출력', t:'지시선 · 공차 · 치수 모양 · 출력', fig:'leader',
  pts:['<b>QLEADER</b>(LE) — <b>지시선</b>을 그어 설명을 붙인다. 모따기·구멍 가공 지시에 쓴다.',
       '<b>TOLERANCE</b>(TOL) — 기하공차 기호를 넣는다.',
       '치수 모양은 하나씩 고치는 게 아니라 <b>{{DIMSTYLE}}</b>(DDIM) 에서 <b>한 번에</b> 정해 둔다.',
@@ -506,7 +395,7 @@ var LESSON = [
  anso:['x=400, y=280','x=415, y=290','x=420, y=297','x=410, y=287'], ansa:3,
  anse:'왼쪽 아래 (10,10) · 오른쪽 위 <b>(410,287)</b> — 사방으로 10mm 씩 남긴 것이다.'},
 
-{u:'Ⅵ. 도면 시트형식 (실기)', t:'④ 중심마크',
+{u:'Ⅵ. 도면 시트형식 (실기)', t:'④ 중심마크', fig:'sheet',
  pts:['<b>선 그리기</b> 를 골라 <b>네 변의 한가운데</b> 에 짧은 선을 긋는다.',
       '길이는 윤곽선에서 <b>안쪽·바깥쪽으로 각각 {{5mm}}</b> 씩이다.',
       '중심마크는 도면을 <b>복사하거나 접을 때 기준</b>이 되는 표시다.',
@@ -516,7 +405,7 @@ var LESSON = [
  anso:['네 모서리에 대각선으로','네 변의 중심에 안팎 5mm 씩','가운데에 십자로','윤곽선을 두 겹으로'], ansa:1,
  anse:'네 변의 중심에서 안쪽·바깥쪽으로 각각 <b>5mm</b> 씩 선을 긋는다.'},
 
-{u:'Ⅵ. 도면 시트형식 (실기)', t:'⑤ 표제란',
+{u:'Ⅵ. 도면 시트형식 (실기)', t:'⑤ 표제란', fig:'title',
  pts:['<b>선 그리기</b> 와 <b>{{오프셋}}</b> 으로 칸을 만든다 — Ⅲ단원에서 배운 그 오프셋이다.',
       '글자는 주석 탭의 <b>노트</b> 로 넣는다. 크기 <b>{{3.5mm}}</b>, <b>고딕체</b>.',
       '들어가는 것 — 생산자동화기능사 · <b>수험번호</b> · <b>성명</b> · <b>감독위원(인)</b>.',
@@ -538,7 +427,7 @@ var LESSON = [
  anso:['실선','점선','일점쇄선','이점쇄선'], ansa:2,
  anse:'5번 중심선은 빨강 0.25 <b>일점쇄선</b>이다. 이점쇄선은 6번 절단선이다.'},
 
-{u:'Ⅵ. 도면 시트형식 (실기)', t:'⑦ 시트형식의 선에 레이어 배정',
+{u:'Ⅵ. 도면 시트형식 (실기)', t:'⑦ 시트형식의 선에 레이어 배정', fig:'sheet',
  pts:['<code>Ctrl</code> 로 같은 층에 넣을 선을 <b>여러 개 한꺼번에</b> 고른다.',
       '왼쪽 아래에서 레이어를 바꾸고 <b>{{요소변환}}</b> 을 누른다 — 이걸 안 누르면 안 바뀐다.',
       '<b>윤곽선 ➜ 1번</b>(하늘색 0.7) · <b>중심마크·표제란 외곽 ➜ {{2번}}</b>(녹색 0.5)',
@@ -548,7 +437,7 @@ var LESSON = [
  anso:['하늘색 0.7','녹색 0.5','노랑 0.35','빨강 0.25'], ansa:0,
  anse:'윤곽선은 <b>1번 레이어 · 하늘색 · 0.7mm</b> — 도면에서 가장 굵다.'},
 
-{u:'Ⅵ. 도면 시트형식 (실기)', t:'⑧⑨ 도면의 선에 레이어 배정',
+{u:'Ⅵ. 도면 시트형식 (실기)', t:'⑧⑨ 도면의 선에 레이어 배정', fig:'assign',
  pts:['도면 안쪽에서 오른쪽 클릭 ➜ <b>{{시트편집}}</b> 으로 들어가야 가져온 파트에 치수를 넣을 수 있다.',
       '치수까지 다 넣은 뒤에 선을 하나하나 골라 층을 배정한다.',
       '<b>외형선 ➜ 2번</b>(녹색 0.5) · <b>숨은선 ➜ {{3번}}</b>(노랑 0.35 점선)',
@@ -569,7 +458,7 @@ var LESSON = [
  anso:['저장','시트형식 저장','다른 이름으로 저장','내보내기'], ansa:1,
  anse:'파일 ➜ <b>시트형식 저장</b> 이라야 템플릿으로 쓸 수 있다.'},
 
-{u:'Ⅵ. 도면 시트형식 (실기)', t:'주서 읽는 법',
+{u:'Ⅵ. 도면 시트형식 (실기)', t:'주서 읽는 법', fig:'note',
  pts:['도면 오른쪽 아래의 <b>주서</b> 는 <b>도면에 일일이 적지 않은 것</b>을 한꺼번에 정해 둔 자리다.',
       '1. 도시되고 지시되지 않은 <b>모따기 C1</b> · 2. 도시되고 지시되지 않은 <b>라운드 R2</b>',
       '3. 일반공차 <b>&#177;0.1</b>, 일반모따기 <b>C0.2</b>',
@@ -647,7 +536,7 @@ var LESSON = [
  anso:['참조평면','얇은 피처','필렛','원형 패턴'], ansa:1,
  anse:'얇은 피처다. 참조평면은 <b>스케치할 면</b>을 만들어 주는 것이다.'},
 
-{u:'Ⅶ. 3D 모델링 (솔리드웍스)', t:'과제 7 · 8 — 렌더링과 기어',
+{u:'Ⅶ. 3D 모델링 (솔리드웍스)', t:'과제 7 · 8 — 렌더링과 기어', fig:'rgear',
  pts:['<b>렌더링</b> — 재질과 빛을 입혀 <b>실물처럼</b> 보이게 한다. 치수는 하나도 바뀌지 않고 {{보이는 것}}만 바뀐다.',
       '실제 수업에서 학생이 뽑은 주제 — 콜라캔 · 볼펜 · USB · 묠니르 · 시계 · 주사위 · 반지 · 자전거 · 탱크 · 모아이 석상 · 피아노 · 수리검 · 왕관 · 후라이팬.',
       '<b>과제 8 — 기어.</b> 이 하나를 만들고 <b>{{원형 패턴}}</b> 으로 둘러 세우면 잇수만큼 생긴다.',
@@ -683,5 +572,5 @@ var LESSON = [
 ];
 
 window.LESSON  = LESSON;
-window.LESSFIG = FIGS;
+window.LESSFIG = LF;
 })();
